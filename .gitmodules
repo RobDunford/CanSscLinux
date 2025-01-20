@@ -1,0 +1,3 @@
+[submodule "canssc"]
+	path = canssc
+	url = https://github.com/RobDunford/canssc.git

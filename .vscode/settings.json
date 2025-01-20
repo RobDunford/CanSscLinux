@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "dirent.h": "c",
+        "stdlib.h": "c",
+        "time.h": "c",
+        "if.h": "c",
+        "socket.h": "c",
+        "string.h": "c",
+        "stdio.h": "c",
+        "raw.h": "c",
+        "can.h": "c",
+        "stdbool.h": "c",
+        "pthread.h": "c",
+        "canssc.h": "c",
+        "datastore.h": "c",
+        "config.h": "c"
+    }
+}
