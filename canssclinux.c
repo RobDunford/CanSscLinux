@@ -56,7 +56,6 @@ void* menu_display(void* arg)
         char cType;
         int nodes;
         int msg;
-        bool pending = false;
 
         int retval = sscanf(line, "%c %d %d", &cType, &nodes, &msg);
 
@@ -110,7 +109,8 @@ void TransferResult(uint16_t msgId, bool result, uint8_t cause)
 {
     if (result)
     {
-        printf("Great success! msg %d sent (%d)\n", msgId, cause);
+        printf("msg %d OK\n", msgId);
+        //DataStorePrintFile(msgId);
     }
     else
     {
