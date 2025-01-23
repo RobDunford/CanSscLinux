@@ -31,7 +31,7 @@ void serialShowCan(uint32_t can_id, uint8_t* message, uint32_t size,
                    char* dirStr)
 {
     canId_t canId;
-    canId.val = can_id;
+    canId.val = can_id & 0x1FFFFFFF;//seems more important that it should be
     char trans[9] = {
         "SGPDNRAF"}; // T_SIMPLE,T_GET,T_PUT,T_DATA,T_NEXT,T_REPEAT,T_ABORT,T_DONE,
     char dataStr[9] = {0};
@@ -40,21 +40,22 @@ void serialShowCan(uint32_t can_id, uint8_t* message, uint32_t size,
         size = 8;
     strncpy(dataStr, (const char*)message, size);
 
-    if (canId.split.transport == T_DATA)
+    // if (canId.split.transport == T_DATA)
+    // {
+    //     // printf("%s%c%u-%s\n", dirStr, trans[canId.split.transport],
+    //     // canId.split.frame, dataStr);
+    //     printf("%s %u %s\n", dirStr, canId.split.frame, dataStr);
+    // }
+    // else
     {
-        // printf("%s%c%u-%s\n", dirStr, trans[canId.split.transport],
-        // canId.split.frame, dataStr);
-        printf("%s %u %s\n", dirStr, canId.split.frame, dataStr);
-    }
-    else
-    {
-        printf("%s%c-", dirStr, trans[canId.split.transport]);
+        printf("%s%c%d-", dirStr, trans[canId.split.transport],canId.split.frame);
         for (uint32_t i = 0; i < size; i++)
         {
-            printf("[%02X]", message[i]);
+            printf("%02X ", message[i]);
         }
         printf("\n");
     }
+    // printf("%s %c %X %u\n", dirStr, trans[canId.split.transport],canId.val,TickGetTicks());
 }
 
 void* CanRead(void* arg)
@@ -144,7 +145,7 @@ bool CanPut(uint32_t* id, char* msg, uint8_t len)
 {
     bool sent = false;
     struct can_frame frame = {.can_id = *id | CAN_EFF_FLAG, .len = len};
-
+    //struct can_frame frame = {.can_id = *id & CAN_EFF_MASK, .len = len};
     memcpy(frame.data, msg, frame.len);
 
     serialShowCan(*id, msg, len, "Tx");
