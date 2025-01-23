@@ -17,4 +17,6 @@ void DataStoreClose(uint16_t id, bool state);
 
 void DataStoreListFiles(void);
 
+void DataStorePrintFile(uint16_t id);
+
 #endif
