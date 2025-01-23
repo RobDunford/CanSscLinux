@@ -77,12 +77,12 @@ void CanStart(void)
     struct ifreq ifr; // interface request variable
 
     /* Set interface up - this may require increased OS privileges */
-    // char device[] = {"can0"};
+    char device[] = {"can0"};
 
-    // can_do_stop(device);
-    // can_set_bitrate(device, 500000);
-    // can_set_restart_ms(device, 100);
-    // can_do_start(device);
+    can_do_stop(device);
+    can_set_bitrate(device, 500000);
+    can_set_restart_ms(device, 100);
+    can_do_start(device);
 
     /*Create the CAN socket */
     /* Notes:
