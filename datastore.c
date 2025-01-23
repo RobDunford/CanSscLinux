@@ -156,13 +156,6 @@ bool DataStoreVerifyPut(uint16_t id, uint32_t len)
 
 bool DataStorePut(uint16_t id, char *pData, uint8_t len)
 {
-    // for (uint16_t i = 0; i < len; i++)
-    // {
-    //     if (i % 8 == 0)
-    //         printf("\n ");
-    //     printf("%02X ", pData[i]);
-    // }
-    // Writing to binary file
     file = fopen(TEMP_FILENAME, "wb+");
     if (file == NULL) {
         perror("Error opening file for writing");
@@ -193,7 +186,6 @@ void DataStoreClose(uint16_t id, bool state)
         rename(TEMP_FILENAME, dataFileName);
     }
    
-    file = NULL;
 
     printf("File %d closed\n", id);
     return;
