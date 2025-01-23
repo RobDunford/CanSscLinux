@@ -24,7 +24,7 @@ canSsc_t hostCan;
 
 bool actionRequired = false;
 
-long int get_file_size(FILE* file)
+long int get_file_size(FILE *file)
 {
     long int size;
     fseek(file, 0, SEEK_END);
@@ -33,10 +33,13 @@ long int get_file_size(FILE* file)
     return size;
 }
 
-void* menu_display(void* arg)
+void *menu_display(void *arg)
 {
-    char* line = NULL;
+    char *line = NULL;
     size_t len = 0;
+    static char previousType = 0;
+    static int previousNodes = 0;
+    static int previousMsg = 0;
     char menuText[] = {
         "\nUsage: Type (S)imple /(G)et /(P)ut nodes msg \n"
         "ex:'S 5 2' requests a simple msg involving nodes 0 "
@@ -58,29 +61,47 @@ void* menu_display(void* arg)
         int msg;
 
         int retval = sscanf(line, "%c %d %d", &cType, &nodes, &msg);
-
-        if (retval == 3)
+        if (retval == 1)
         {
+            if (tolower(cType) == 'x')
+                running = false;
+            else if (tolower(cType) == 'l')
+                DataStoreListFiles();
+            else if (tolower(cType) == 'r')
+            {
+                cType = previousType;
+                nodes = previousNodes;
+                msg = previousMsg;
+                retval = 3;
+            }
+            else
+                printf("%s", menuText);
+        }
+        if ((retval == 3) && (nodes > 0))
+        {
+            previousType = cType;
+            previousNodes = nodes;
+            previousMsg = msg;
             nodes &= 0xFF;
             msg &= 0xFFF;
             canTransport_t msgType = T_ABORT;
             switch (tolower(cType))
             {
-                case 's':
-                {
-                    msgType = T_SIMPLE;
-                    break;
-                }
-                case 'g':
-                {
-                    msgType = T_GET;
-                    break;
-                }
-                case 'p':
-                {
-                    msgType = T_PUT;
-                    break;
-                }
+            case 's':
+            {
+                msgType = T_SIMPLE;
+                break;
+            }
+            case 'g':
+            {
+                msgType = T_GET;
+                break;
+            }
+            case 'p':
+            {
+                msgType = T_PUT;
+                break;
+            }
             }
             if (msgType != T_ABORT)
             {
@@ -88,15 +109,6 @@ void* menu_display(void* arg)
                 CanSscStart(&hostCan, msgType, 0, nodes, msg);
                 pthread_mutex_unlock(&userIpLock);
             }
-        }
-        else if (retval == 1)
-        {
-            if (tolower(cType) == 'x')
-                running = false;
-            else if (tolower(cType) == 'l')
-                DataStoreListFiles();
-            else
-                printf("%s", menuText);
         }
         else
             printf("%s", menuText);
@@ -110,7 +122,7 @@ void TransferResult(uint16_t msgId, bool result, uint8_t cause)
     if (result)
     {
         printf("msg %d OK\n", msgId);
-        //DataStorePrintFile(msgId);
+        // DataStorePrintFile(msgId);
     }
     else
     {
