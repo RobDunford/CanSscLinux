@@ -143,6 +143,11 @@ void DataStoreClose(uint16_t id, bool state)
         remove(dataFileName);
         rename(TEMP_FILENAME, dataFileName);
     }
+    else{
+        fclose(file);
+    }
+    file=NULL;
+
     printf("File %d closed\n", id);
     return;
 }
