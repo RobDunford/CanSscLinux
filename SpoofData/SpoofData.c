@@ -86,7 +86,7 @@ int main()
         return 1;
     }
 
-    while (running)
+    while (1)
     {
         // Get current time
         time(&current_time);
