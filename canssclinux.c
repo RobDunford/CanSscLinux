@@ -44,7 +44,7 @@ void *menu_display(void *arg)
         "\nUsage: Type (S)imple /(G)et /(P)ut nodes msg \n"
         "ex:'S 5 2' requests a simple msg involving nodes 0 "
         "and 2 (include yourself) sending message 2\n"
-        "l to list files \nx to exit\nEnter required to consider input\n"};
+        "l to list files \nr to repeat last\nx to exit\nEnter required to consider input\n"};
 
     running = true; // cross thread variable only written in this thread
     printf("CanSsc node %d\n", CAN_SSC_NODE_ID);
